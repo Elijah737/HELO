@@ -2,16 +2,19 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import {connect} from 'react-redux';
 import {loginUser} from '../../ducks/reducer';
+// import { useHistory } from "react-router-dom";
+import {withRouter} from 'react-router-dom';
+
 
 class Auth extends Component{
   constructor(){
     super();
     this.state = {
-        password: '',
-        username: '',
+      password: '',
+      username: '',
     }
-}
-
+  }
+  
 changeHandler = (e) => {
   this.setState({
       [e.target.name]: e.target.value
@@ -19,9 +22,11 @@ changeHandler = (e) => {
 }
 
 login = () => {
+  // const history = useHistory();
   const {username, password} = this.state;
   axios.post('/auth/login', {username, password}).then(res => {
       this.props.loginUser(res.data);
+      this.props.history.push('/dashboard');
   }).catch(err => {
       console.log(err);
       alert('Login Failed')
@@ -32,6 +37,7 @@ register = () => {
   const {username, password} = this.state;
   axios.post('/auth/register', {username, password}).then(res => {
       this.props.loginUser(res.data);
+      this.props.history.push('/dashboard');
   }).catch(err => {
       console.log(err);
       alert('Register Failed')
@@ -39,12 +45,10 @@ register = () => {
 }
 
 
-
     render(){
       const {password, username} = this.state;
     return(
         <div className='login-container' >
-
 
                 <div>
                     <input onChange={e => this.changeHandler(e)} name="username" type="text" value={username} placeholder="Username"/>
@@ -55,7 +59,6 @@ register = () => {
                     </div> 
                 </div>
 
-
         </div>
     )
 
@@ -64,4 +67,4 @@ register = () => {
 
 const mapStateToProps = state => state;
 
-export default connect(mapStateToProps, {loginUser})(Auth);
+export default connect(mapStateToProps, {loginUser})(withRouter(Auth));

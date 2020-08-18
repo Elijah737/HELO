@@ -35,7 +35,7 @@ logout = () => {
         <div className='linkwrap' >
         <ul className='linklist'>
           <li><Link to='/dashboard' className='links' >Home</Link></li>
-          <li><Link to='/new' className='links' >Post</Link></li>
+          <li><Link to='/post/:postid' className='links' >Post</Link></li>
           <li onClick={this.logout}><Link to='/' className='links' >Logout</Link></li>
         </ul>
         </div>

@@ -1,12 +1,7 @@
 import axios from 'axios';
 
 const initialState = {
-    user: {
-        username: '',
-        pic:'',
-        id:''
-    },
-
+    user: {},
     isLoggedIn: false
 }
 

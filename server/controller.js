@@ -11,6 +11,7 @@ module.exports = {
            const authenticated = bcrypt.compareSync(password, user[0].password);
            if(authenticated){
                req.session.user = {
+                   user_id: user[0].user_id,
                    username: user[0].username
                }
                res.status(200).send(req.session.user)
@@ -21,16 +22,18 @@ module.exports = {
     },
     register: async (req, res) => {
         const db = req.app.get('db');
-        const {username, password} = req.body;
+        const {username, pic, password} = req.body;
         const existingUser = await db.check_user(username);
         if(existingUser[0]){
             return res.status(409).send('User already exists')
         }
         const salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(password, salt)
-        const [newUser] = await db.create_user([username, hash])
+        const [newUser] = await db.create_user([username, pic, hash])
         req.session.user = {
-            username: newUser[0].username
+            user_id: newUser[0].user_id,
+            username: newUser[0].username,
+            pic: newUser[0].pic
         }
         res.status(200).send(req.session.user)
     },
